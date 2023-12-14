@@ -1,0 +1,30 @@
+----- continuando estudos React
+----- Projeto Ignite Timer
+------------> Modulo 01 - Estrutura da Aplicação:
+-- 04/12/2023:
+- 00 - Introdução:
+	- fazer um projeto que permita cadastrar os instrutores e candidatos, e também lançar a presença e falta dos mesmos.
+	- No Front-end:
+		- pasta gem-goulart/web
+		- react com vite + typescript
+		- tailwind no css
+	- No Back-end:
+		- pasta gem-goulart/server
+		- nodejs + typescript
+		- sqlite no banco de dados
+
+- 01 - Setup do projeto REACT:
+	- para criar o projeto, abrir o powershell, criar a pasta "web" no diretorio escolhido, navegar até o mesmo, executar " npm create vite@latest " e seguir os passos 
+		para escolha das especificações do projeto:
+		- Nome: web | Framework: react | Variant: typescript
+	- entrar na pasta do projeto "cd web", executar "npm i" para instalar as dependências
+	- execute "code ." ou "code-insiders ." para abrir o projeto
+	- limpar a estrutura do projeto:
+		- remover assets, App.css, index.css, 
+		- dentro do main.tsx, remover as importações de css
+		- no App.tsx, mudar o "export default" para "export function"
+	- para rodar o projeto "npm run dev"
+	- instalar o styled-components " npm i styled-components "
+	- instalar a tipagem do styled-components " npm i @types/styled-components -D "
+	- adicionar a font Roboto no index.html
+
