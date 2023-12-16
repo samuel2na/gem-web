@@ -9,7 +9,7 @@ export function App() {
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyle />
 
-      <Header visible={true} />
+      <Header visible={false} />
       <Login />
     </ThemeProvider>
   );
