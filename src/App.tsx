@@ -1,8 +1,8 @@
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle } from "./styles/global";
 import { defaultTheme } from "./styles/themes/default";
-//import { Login } from "./pages/login";
-import { Header } from "./components/Header";
+//import { Login } from "./pages/Login/login";
+//import { Header } from "./components/Header";
 import { Home } from "./pages/Home";
 
 export function App() {
@@ -10,7 +10,7 @@ export function App() {
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyle />
 
-      <Header visible={false} />
+      {/* <Header visible={false} /> */}
       {/* <Login /> */}
       <Home />
     </ThemeProvider>
