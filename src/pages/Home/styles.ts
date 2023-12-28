@@ -8,34 +8,36 @@ export const Container = styled.div`
   padding: 0 1.5rem; /* espaçamento nas laterais */
 `;
 
+export const Th = styled.th`
+  //width: 20%;
+`;
+
 export const HomeTable = styled.table`
   width: 100%;
   border-collapse: separate; /* usando essa opção permite usar a opção abaixo que da um espaço entre as linhas */
   border-spacing: 0 0.5rem;
-  /* margin-top: 1.5rem; */
 
   thead > tr > th {
     &:first-child {
-      width: 30%;
+      width: 20%;
     }
   }
 
   thead > tr {
-    th:nth-child(n+2) {
+    th:nth-child(n + 2) {
       width: 3%;
     }
   }
 
   tbody > tr {
-    td:nth-child(n+2) {
+    td:nth-child(n + 2) {
       text-align: center;
     }
-  } 
+  }
 
   td {
     padding: 0.5rem 0.5rem;
     background: ${(props) => props.theme["gray-700"]};
-
 
     &:first-child {
       border-top-left-radius: 6px;
