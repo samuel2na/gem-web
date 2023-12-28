@@ -1,17 +1,19 @@
 // import { Link, useHistory } from "react-router-dom";
+import { Header } from "../../components/Header";
 import { Container, Form } from "./styles";
 // import notasImg from "../assets/notas_musicais.png";
 
 export function Login() {
   // const history = useHistory();
 
-  function handleLogin(){
+  function handleLogin() {
     //e.preventDefault();
     // history.push("/Home");
   }
 
   return (
     <>
+      <Header visible={false} />
       <Container>
         {/* <img src={notasImg} alt="Moda" /> */}
         <Form>
