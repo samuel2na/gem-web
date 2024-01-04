@@ -26,7 +26,7 @@ export function Home() {
               {Object.keys(arrCandidatos[0]).map(
                 (key) => key != "id" && <th key={key}>{key}</th>
               )}
-              <th>teste-TH</th>
+              {/* <th>teste-TH</th> */}
             </tr>
           </thead>
           <tbody>
@@ -36,12 +36,12 @@ export function Home() {
                   // value.length, acaba excluindo a coluna "id" pois a mesma é number e o .length conta caracteres na string
                   (value) => value.length > 3 && <td key={value}>{value}</td>
                 )}
-                <td>teste-TD</td>
+                {/* <td>teste-TD</td> */}
               </tr>
             ))}
-            <tr>
+            {/* <tr>
               <td>teste-TD2</td>
-            </tr>
+            </tr> */}
           </tbody>
         </HomeTable>
       </Container>
