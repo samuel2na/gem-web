@@ -14,6 +14,27 @@ const arrCandidatos: CandidatosProps[] = [
   { id: 3, nome: "Elielson", instrumento: "Fagote", inicioGEM: "20/05/2023" },
 ];
 
+function getSundayDates(year: number) {
+  const sundays = [];
+  for (let month = 0; month < 12; month++) {
+    const d = new Date(year, month, 1);
+    while (d.getDay() !== 0) {
+      d.setDate(d.getDate() + 1);
+    }
+    while (d.getMonth() === month) {
+      sundays.push(new Date(d));
+      d.setDate(d.getDate() + 7);
+    }
+  }
+  //return sundays.map(date => `${date.getMonth() + 1}-${date.getDate()}`);
+  return sundays.filter(date => date.getMonth() === 0).map(date => `m${date.getMonth() + 1}-d${date.getDate()}`);
+}
+
+const year = 2024;
+const sundays = getSundayDates(year);
+console.log(`All Sundays in ${year}:`);
+console.log(sundays);
+
 export function Home() {
   return (
     <>
@@ -26,7 +47,7 @@ export function Home() {
               {Object.keys(arrCandidatos[0]).map(
                 (key) => key != "id" && <th key={key}>{key}</th>
               )}
-              <th>teste-TH</th>
+              {sundays.map((d) => <th key={d}>{d}</th>)}
             </tr>
           </thead>
           <tbody>
@@ -36,12 +57,14 @@ export function Home() {
                   // value.length, acaba excluindo a coluna "id" pois a mesma é number e o .length conta caracteres na string
                   (value) => value.length > 3 && <td key={value}>{value}</td>
                 )}
-                <td>teste-TD</td>
+                {sundays.map((d) => <td key={d}>
+                  <input type="checkbox" id={d} name={d} value={d} />
+                </td>)}
               </tr>
             ))}
-            <tr>
+            {/* <tr>
               <td>teste-TD2</td>
-            </tr>
+            </tr> */}
           </tbody>
         </HomeTable>
       </Container>
