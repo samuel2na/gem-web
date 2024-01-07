@@ -16,7 +16,7 @@ const arrCandidatos: CandidatosProps[] = [
 ];
 
 const dateCurrent = new Date();
-const monthCurrent = dateCurrent.getMonth();
+//const monthCurrent = dateCurrent.getMonth();
 const yearCurrent = dateCurrent.getFullYear();
 
 export function Home() {
@@ -40,14 +40,19 @@ export function Home() {
       }
     }
     //return sundays.map(date => `${date.getMonth() + 1}-${date.getDate()}`);
-    return sundays
-      .filter((date) => date.getMonth().toString() == monthCurrent.toString())
-      .map((date) => `m${date.getMonth() + 1}-d${date.getDate()}`);
+    // console.log(sundays);
 
-    console.log(sundays);
+    return sundays
+    .filter((date) => date.getMonth().toString() == slcMes.toString())
+    .map((date) => `m${date.getMonth() + 1}-d${date.getDate()}`);
   }
 
   const sundays = getSundayDates(yearCurrent);
+
+  function hundleAddPresence(e : any){
+    alert(e.detail);
+    console.log(sundays);
+  }
 
   return (
     <>
@@ -58,22 +63,23 @@ export function Home() {
             Selecione o mês que deseja ver a presença dos candidatos:{" "}
           </span>
           <select value={slcMes} onChange={(e) => setSlcMes(e.target.value)}>
-            <option value="1">Janeiro</option>
-            <option value="2">Fevereiro</option>
-            <option value="3">Março</option>
-            <option value="4">Abril</option>
-            <option value="5">Maio</option>
-            <option value="6">Junho</option>
-            <option value="7">Julho</option>
-            <option value="8">Agosto</option>
-            <option value="9">Setembro</option>
-            <option value="10">Outubro</option>
-            <option value="11">Novembro</option>
-            <option value="12">Dezembro</option>
+            <option value="0">Janeiro</option>
+            <option value="1">Fevereiro</option>
+            <option value="2">Março</option>
+            <option value="3">Abril</option>
+            <option value="4">Maio</option>
+            <option value="5">Junho</option>
+            <option value="6">Julho</option>
+            <option value="7">Agosto</option>
+            <option value="8">Setembro</option>
+            <option value="9">Outubro</option>
+            <option value="10">Novembro</option>
+            <option value="11">Dezembro</option>
           </select>
         </div>
 
-        <label htmlFor=""> mes: {monthCurrent}</label>
+        {/* <label htmlFor=""> mes: {slcMes}</label> */}
+
         <HomeTable>
           <thead>
             <tr>
@@ -95,7 +101,7 @@ export function Home() {
                 )}
                 {sundays.map((d) => (
                   <td key={d}>
-                    <input type="checkbox" id={d} name={d} value={d} />
+                    <input type="checkbox" id={d} name={d} value={d} onClick={hundleAddPresence} />
                   </td>
                 ))}
               </tr>
@@ -105,6 +111,7 @@ export function Home() {
             </tr> */}
           </tbody>
         </HomeTable>
+
       </Container>
       {/* {
         <Container>
