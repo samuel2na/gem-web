@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
 import { Container, HomeTable } from "./styles";
 
@@ -14,32 +15,65 @@ const arrCandidatos: CandidatosProps[] = [
   { id: 3, nome: "Elielson", instrumento: "Fagote", inicioGEM: "20/05/2023" },
 ];
 
-function getSundayDates(year: number) {
-  const sundays = [];
-  for (let month = 0; month < 12; month++) {
-    const d = new Date(year, month, 1);
-    while (d.getDay() !== 0) {
-      d.setDate(d.getDate() + 1);
-    }
-    while (d.getMonth() === month) {
-      sundays.push(new Date(d));
-      d.setDate(d.getDate() + 7);
-    }
-  }
-  //return sundays.map(date => `${date.getMonth() + 1}-${date.getDate()}`);
-  return sundays.filter(date => date.getMonth() === 0).map(date => `m${date.getMonth() + 1}-d${date.getDate()}`);
-}
-
-const year = 2024;
-const sundays = getSundayDates(year);
-console.log(`All Sundays in ${year}:`);
-console.log(sundays);
+const dateCurrent = new Date();
+const monthCurrent = dateCurrent.getMonth();
+const yearCurrent = dateCurrent.getFullYear();
 
 export function Home() {
+  const [slcMes, setSlcMes] = useState("0");
+
+  useEffect(() => {
+    if (slcMes != "0") return; //alert(`mês escolhido: ${slcMes} -  mês atual: ${monthCurrent}`);
+    // chamar a função para trazer os dados dos candidatos de acordo com o mês escolhido
+  }, [slcMes]);
+
+  function getSundayDates(year: number) {
+    const sundays = [];
+    for (let month = 0; month < 12; month++) {
+      const d = new Date(year, month, 1);
+      while (d.getDay() !== 0) {
+        d.setDate(d.getDate() + 1);
+      }
+      while (d.getMonth() === month) {
+        sundays.push(new Date(d));
+        d.setDate(d.getDate() + 7);
+      }
+    }
+    //return sundays.map(date => `${date.getMonth() + 1}-${date.getDate()}`);
+    return sundays
+      .filter((date) => date.getMonth().toString() == monthCurrent.toString())
+      .map((date) => `m${date.getMonth() + 1}-d${date.getDate()}`);
+
+    console.log(sundays);
+  }
+
+  const sundays = getSundayDates(yearCurrent);
+
   return (
     <>
       <Header visible />
       <Container>
+        <div>
+          <span>
+            Selecione o mês que deseja ver a presença dos candidatos:{" "}
+          </span>
+          <select value={slcMes} onChange={(e) => setSlcMes(e.target.value)}>
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+        </div>
+
+        <label htmlFor=""> mes: {monthCurrent}</label>
         <HomeTable>
           <thead>
             <tr>
@@ -47,11 +81,9 @@ export function Home() {
               {Object.keys(arrCandidatos[0]).map(
                 (key) => key != "id" && <th key={key}>{key}</th>
               )}
-<<<<<<< HEAD
-              {/* <th>teste-TH</th> */}
-=======
-              {sundays.map((d) => <th key={d}>{d}</th>)}
->>>>>>> c06658c2fc65a3be66bbf66f411211846a9c1108
+              {sundays.map((d) => (
+                <th key={d}>{d}</th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -61,13 +93,11 @@ export function Home() {
                   // value.length, acaba excluindo a coluna "id" pois a mesma é number e o .length conta caracteres na string
                   (value) => value.length > 3 && <td key={value}>{value}</td>
                 )}
-<<<<<<< HEAD
-                {/* <td>teste-TD</td> */}
-=======
-                {sundays.map((d) => <td key={d}>
-                  <input type="checkbox" id={d} name={d} value={d} />
-                </td>)}
->>>>>>> c06658c2fc65a3be66bbf66f411211846a9c1108
+                {sundays.map((d) => (
+                  <td key={d}>
+                    <input type="checkbox" id={d} name={d} value={d} />
+                  </td>
+                ))}
               </tr>
             ))}
             {/* <tr>
