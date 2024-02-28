@@ -2,56 +2,55 @@ import { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
 import { Container, HomeTable } from "./styles";
 
-interface CandidatosProps {
-  id: number;
-  nome: string;
-  instrumento: string;
-  inicioGEM: string;
-}
-
-const arrCandidatos: CandidatosProps[] = [
-  { id: 1, nome: "Samuel", instrumento: "Eufônio", inicioGEM: "01/01/2006" },
-  { id: 2, nome: "Izac", instrumento: "Baritono", inicioGEM: "20/05/1995" },
-  { id: 3, nome: "Elielson", instrumento: "Fagote", inicioGEM: "20/05/2023" },
-];
-
 const dateCurrent = new Date();
-//const monthCurrent = dateCurrent.getMonth();
-const yearCurrent = dateCurrent.getFullYear();
+const monthCurrent = (dateCurrent.getMonth() + 1).toString();
+const yearCurrent = dateCurrent.getFullYear().toString();
 
 export function Home() {
   const [slcMes, setSlcMes] = useState("0");
+  const [candidate, setCandidates] = useState<any>([]);
+
 
   useEffect(() => {
     if (slcMes != "0") return; //alert(`mês escolhido: ${slcMes} -  mês atual: ${monthCurrent}`);
-    // chamar a função para trazer os dados dos candidatos de acordo com o mês escolhido
+    setSlcMes(monthCurrent);
+    getPresences(yearCurrent, monthCurrent);
   }, [slcMes]);
 
-  function getSundayDates(year: number) {
-    const sundays = [];
-    for (let month = 0; month < 12; month++) {
-      const d = new Date(year, month, 1);
-      while (d.getDay() !== 0) {
-        d.setDate(d.getDate() + 1);
-      }
-      while (d.getMonth() === month) {
-        sundays.push(new Date(d));
-        d.setDate(d.getDate() + 7);
-      }
-    }
-    //return sundays.map(date => `${date.getMonth() + 1}-${date.getDate()}`);
-    // console.log(sundays);
+  async function hundleAddPresence(e: any) {
+    const candidate_id = e.target.value;
+    const year = yearCurrent;
+    const month = monthCurrent;
+    const day = e.target.id;
+    const wasPresent = (e.target.checked === true) ? 1 : 0;
 
-    return sundays
-    .filter((date) => date.getMonth().toString() == slcMes.toString())
-    .map((date) => `m${date.getMonth() + 1}-d${date.getDate()}`);
+    //console.log(candidate_id, year, month, day, wasPresent);
+    //return;
+    const bodyData = { candidate_id, year, month, day, wasPresent };
+
+    //console.log(bodyData);
+    //return
+
+    //chamar o metodo patch - passando no body: candidate_id, year, month, day, wasPresent 
+    const url = "http://localhost:3333/presence";
+    const res = await fetch(url, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bodyData),
+    });
+    const data = await res; //json();
+    //console.log(data);
   }
 
-  const sundays = getSundayDates(yearCurrent);
+  async function getPresences(year: string, month: string) {
+    const url = new URL("http://localhost:3333/presence");
+    url.searchParams.append("year", year);
+    url.searchParams.append("month", month);
 
-  function hundleAddPresence(e : any){
-    alert(e.detail);
-    console.log(sundays);
+    const res = await fetch(url);
+    const data = await res.json();
+
+    setCandidates(data);
   }
 
   return (
@@ -59,177 +58,93 @@ export function Home() {
       <Header visible />
       <Container>
         <div>
-          <span>
-            Selecione o mês que deseja ver a presença dos candidatos:{" "}
-          </span>
+          <span>Selecione o mês de presença dos candidatos: </span>
+          {/* <input type="text" size={3} placeholder="Ano" /> */}
           <select value={slcMes} onChange={(e) => setSlcMes(e.target.value)}>
-            <option value="0">Janeiro</option>
-            <option value="1">Fevereiro</option>
-            <option value="2">Março</option>
-            <option value="3">Abril</option>
-            <option value="4">Maio</option>
-            <option value="5">Junho</option>
-            <option value="6">Julho</option>
-            <option value="7">Agosto</option>
-            <option value="8">Setembro</option>
-            <option value="9">Outubro</option>
-            <option value="10">Novembro</option>
-            <option value="11">Dezembro</option>
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="8">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
           </select>
+          <button onClick={() => getPresences(yearCurrent, slcMes)}>Buscar candidatos</button>
         </div>
-
-        {/* <label htmlFor=""> mes: {slcMes}</label> */}
 
         <HomeTable>
           <thead>
             <tr>
               {/* array por chave/key */}
-              {Object.keys(arrCandidatos[0]).map(
-                (key) => key != "id" && <th key={key}>{key}</th>
-              )}
-              {sundays.map((d) => (
-                <th key={d}>{d}</th>
-              ))}
+              {/* { Object.keys(candidate).map(
+                (
+                  key //key != "candidate_id" &&
+                ) => (
+                  <th key={key}>{key}</th>
+                )
+              )} */}
             </tr>
           </thead>
           <tbody>
-            {arrCandidatos.map((cand) => (
-              <tr key={cand.id}>
-                {Object.values(cand).map(
-                  // value.length, acaba excluindo a coluna "id" pois a mesma é number e o .length conta caracteres na string
-                  (value) => value.length > 3 && <td key={value}>{value}</td>
-                )}
-                {sundays.map((d) => (
-                  <td key={d}>
-                    <input type="checkbox" id={d} name={d} value={d} onClick={hundleAddPresence} />
+            {candidate.map((cand) => {
+              return (
+                <tr key={cand.candidate_id}>
+                  <td>{cand.name}</td>
+                  <td>{cand.instrument}</td>
+                  <td>ig: {cand.startDateGEM}</td>
+                  <td>
+                    {" "}
+                    d{cand.d1.replace(/true|false/g, "")}{" "}
+                    <input
+                      type="checkbox"
+                      value={cand.candidate_id}
+                      id={cand.d1.replace(/true|false/g, "")}
+                      defaultChecked={cand.d1.replace(/[0-9]/g, "") === "true"}
+                      onChange={hundleAddPresence}
+                    ></input>
                   </td>
-                ))}
-              </tr>
-            ))}
-            {/* <tr>
-              <td>teste-TD2</td>
-            </tr> */}
+                  <td>
+                    {" "}
+                    d{cand.d2.replace(/true|false/g, "")}{" "}
+                    <input
+                      type="checkbox"
+                      value={cand.candidate_id}
+                      id={cand.d2.replace(/true|false/g, "")}
+                      defaultChecked={cand.d2.replace(/[0-9]/g, "") === "true"}
+                      onChange={hundleAddPresence}
+                    ></input>
+                  </td>
+                  <td>
+                    d{cand.d3.replace(/true|false/g, "")}{" "}
+                    <input
+                      type="checkbox"
+                      value={cand.candidate_id}
+                      id={cand.d3.replace(/true|false/g, "")}
+                      defaultChecked={cand.d3.replace(/[0-9]/g, "") === "true"}
+                      onChange={hundleAddPresence}
+                    ></input>
+                  </td>
+                  <td>
+                    d{cand.d4.replace(/true|false/g, "")}{" "}
+                    <input
+                      type="checkbox"
+                      value={cand.candidate_id}
+                      id={cand.d4.replace(/true|false/g, "")}
+                      defaultChecked={cand.d4.replace(/[0-9]/g, "") === "true"}
+                      onChange={hundleAddPresence}
+                    ></input>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </HomeTable>
-
       </Container>
-      {/* {
-        <Container>
-          <HomeTable>
-            <thead>
-              <tr>
-                <th>Candidato</th>
-                <th>Instrumento</th>
-                <th>Início GEM</th>
-                <th>Perfil</th>
-                <th>dia-01</th>
-                <th>dia-08</th>
-                <th>dia-17</th>
-                <th>dia-24</th>
-                <th>dia-31</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Izac José da Silva</td>
-                <td>Baritono</td>
-                <td>01/01/2023</td>
-                <td>
-                  <button>Cad.</button>
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="dia-08"
-                    name="dia-08"
-                    value="Bike"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="dia-08"
-                    name="dia-08"
-                    value="Bike"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="dia-08"
-                    name="dia-08"
-                    value="Bike"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="dia-08"
-                    name="dia-08"
-                    value="Bike"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="dia-08"
-                    name="dia-08"
-                    value="Bike"
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>Samuel de Sousa Almeida</td>
-                <td>Eufônio</td>
-                <td>26/12/2023</td>
-                <td>
-                  <button>Cad.</button>
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="dia-08"
-                    name="dia-08"
-                    value="Bike"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="dia-08"
-                    name="dia-08"
-                    value="Bike"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="dia-08"
-                    name="dia-08"
-                    value="Bike"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="dia-08"
-                    name="dia-08"
-                    value="Bike"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="dia-08"
-                    name="dia-08"
-                    value="Bike"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </HomeTable>
-        </Container>
-      } */}
     </>
   );
 }

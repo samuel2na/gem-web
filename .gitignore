@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+Anotacoes-gem-web-goulart.txt
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
